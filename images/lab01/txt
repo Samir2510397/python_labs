@@ -4,14 +4,13 @@
 
 ### Задание 1
 ```python
-print("hello world")
 name = input()
 age = int(input())
 print('Имя:' + name)
 print('Возраст:' + str(age))
 print("Привет," + name + "!", " Через год тебе будет " + str(age) + ".")
 ```
-![Картинка 1](./images/lab01/01.png)
+![Картинка 1](01.png)
 
 ### Задание 2
 ```python
@@ -23,7 +22,7 @@ print("a: " + a.replace('.', ','))
 print("b: " + str(b))
 print("sum=" + str((float(a)+b)) + ";" + " avg=" + str((float(a)+b)/2))
 ```
-![Картинка 1](./images/lab01/02.png)
+![Картинка 2](./images/lab01/02.png)
 
 ### Задание 3
 ```python
@@ -39,7 +38,7 @@ print("База после скидки: " + str(base) + " ₽")
 print("НДС: " + str(vat_amount) + " ₽")
 print("Итого к оплате: " + str(total) + " ₽")
 ```
-![Картинка 1](./images/lab01/03.png)
+![Картинка 3](./images/lab01/03.png)
 
 ### Задание 4
 ```python
@@ -47,7 +46,7 @@ m = int(input())
 print('Минуты:' + ' ' + str(m))
 print(str((m//60)) + ":" + str(m%60))
 ```
-![Картинка 1](./images/lab01/04.png)
+![Картинка 4](./images/lab01/04.png)
 
 ### Задание 5
 ```python
@@ -58,7 +57,7 @@ print("ФИО: ", Surname, Name, Otchestvo)
 print("Инициалы: ", Surname[0] + Name[0] + Otchestvo[0] + '.')
 print("Длина (символов): " + str(len(Surname) + len(Name) + len(Otchestvo) + 2))
 ```
-![Картинка 1](./images/lab01/05.png)
+![Картинка 5](./images/lab01/05.png)
 
 ### Задание 6
 ```python
@@ -79,7 +78,7 @@ for i in range(len(form)):
     elif form[i][3] == 'False': fl += 1
 print("out:", tr, fl)
 ```
-![Картинка 1](./images/lab01/06.png)
+![Картинка 6](./images/lab01/06.png)
 
 ### Задание 7
 ```python
@@ -93,4 +92,4 @@ for i in range(len(a)):
 c.append(''.join([a[i] for i in range(cnt, len(a), 3)]))
 print("out:", *c)
 ```
-![Картинка 1](./images/lab01/07.png)
+![Картинка 7](./images/lab01/07.png)
