@@ -1,2 +1,3 @@
 m = int(input())
-print(f"{(m//60):02d}" + ":" + str(m%60))
+print('Минуты:' + ' ' + str(m))
+print(str((m//60)) + ":" + str(m%60))
