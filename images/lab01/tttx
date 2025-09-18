@@ -1,5 +1,16 @@
-1337
-Максимов Максим 18 True
-Геннадьев Геннадий 17 False
-Алексеев Алексей 17 True
-2 1
+# sggd
+
+## Лабораторная работа 1
+
+### Задание 1
+```python
+print("hello world")
+```
+![Картинка 1](./images/lab01/01.png)
+
+### Задание 2
+```python
+for i in range(10):
+    print("hello world")
+```
+![Картинка 1](./images/lab01/02.png)
