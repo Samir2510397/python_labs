@@ -33,9 +33,9 @@ base = price * (1 - discount/100)
 vat_amount = base * (vat/100)
 total = base + vat_amount
 
-print("База после скидки: " + str(base) + " ₽")
-print("НДС: " + str(vat_amount) + " ₽")
-print("Итого к оплате: " + str(total) + " ₽")
+print("База после скидки: " + f"{base:.2f}" + " ₽")
+print("НДС: " + f"{vat_amount:.2f}" + " ₽")
+print("Итого к оплате: " + f"{total:.2f}" + " ₽")
 ```
 ![Картинка 3](./images/lab01/03.png)
 
@@ -43,7 +43,7 @@ print("Итого к оплате: " + str(total) + " ₽")
 ```python
 m = int(input())
 print('Минуты:' + ' ' + str(m))
-print(str((m//60)) + ":" + str(m%60))
+print(str(m//60) + ":" + f"{(m%60):02d}")
 ```
 ![Картинка 4](./images/lab01/04.png)
 
