@@ -9,7 +9,7 @@ name = input()
 age = int(input())
 print('Имя:' + name)
 print('Возраст:' + str(age))
-print("Привет," + name + "!", " Через год тебе будет " + str(age) + ".")
+print("Привет," + name + "!", " Через год тебе будет " + str(age+1) + ".")
 ```
 ![Картинка 1](images/lab01/01.png)
 
