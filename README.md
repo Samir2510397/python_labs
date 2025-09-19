@@ -11,7 +11,7 @@ print('Имя:' + name)
 print('Возраст:' + str(age))
 print("Привет," + name + "!", " Через год тебе будет " + str(age) + ".")
 ```
-![Картинка 1](./images/lab01/01.png)
+![Картинка 1](images/lab01/011.png)
 
 ### Задание 2
 ```python
