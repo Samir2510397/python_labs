@@ -15,15 +15,13 @@ print("Привет," + name + "!", " Через год тебе будет " + 
 
 ### Задание 2
 ```python
-for i in range(10):
-    print("hello world")
 a = input()
 b = float(input())
 print("a: " + a.replace('.', ','))
 print("b: " + str(b))
-print("sum=" + str((float(a)+b)) + ";" + " avg=" + str((float(a)+b)/2))
+print("sum=" + f"{(float(a)+b):.2f}" + ";" + " avg=" + f"{(float(a)+b)/2:.2f}")
 ```
-![Картинка 2](./images/lab01/02.png)
+![Картинка 2](./images/lab01/022.png)
 
 ### Задание 3
 ```python
@@ -76,7 +74,7 @@ for n in range(int(input())):
 for i in range(len(form)):
     print(str(i+1), form[i][0], form[i][1], form[i][2], form[i][3])
     if form[i][3] == 'True': tr += 1
-    elif form[i][3] == 'False': fl += 1
+    else: fl += 1
 print("out:", tr, fl)
 ```
 ![Картинка 6](./images/lab01/06.png)
