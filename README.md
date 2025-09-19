@@ -19,7 +19,7 @@ a = input()
 b = float(input())
 print("a: " + a.replace('.', ','))
 print("b: " + str(b))
-print("sum=" + str((float(a)+b)) + ";" + " avg=" + str((float(a)+b)/2))
+print("sum=" + f"{(float(a)+b):.2f}" + ";" + " avg=" + f"{(float(a)+b)/2:.2f}")
 ```
 ![Картинка 2](./images/lab01/02.png)
 
