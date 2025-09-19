@@ -15,8 +15,6 @@ print("Привет," + name + "!", " Через год тебе будет " + 
 
 ### Задание 2
 ```python
-for i in range(10):
-    print("hello world")
 a = input()
 b = float(input())
 print("a: " + a.replace('.', ','))
