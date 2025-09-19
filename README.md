@@ -74,7 +74,7 @@ for n in range(int(input())):
 for i in range(len(form)):
     print(str(i+1), form[i][0], form[i][1], form[i][2], form[i][3])
     if form[i][3] == 'True': tr += 1
-    elif form[i][3] == 'False': fl += 1
+    else: fl += 1
 print("out:", tr, fl)
 ```
 ![Картинка 6](./images/lab01/06.png)
