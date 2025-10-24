@@ -124,14 +124,14 @@ print(unique_sorted([-1, -1, 0, 2, 2]))
 print(unique_sorted([1.0, 1, 2.5, 2.5, 0]))
 
 def flatten(mat: list[list | tuple]) -> list:
-    finite = list()
+    rlist = list()
     for i in range(len(mat)):
         if isinstance(mat[i], list) or isinstance(mat[i], tuple):
             for j in mat[i]:
-                finite.append(j)
+                rlist.append(j)
         else:
             return 'TypeError'
-    return finite
+    return rlist
 
 
 
