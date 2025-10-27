@@ -236,3 +236,91 @@ print(format_record(("Петров Пётр Петрович", "IKBO-12", 5.0)))
 print(format_record(("  сидорова  анна   сергеевна ", "ABB-01", 3.999)))
 ```
 ![Картинка 3](./images/lab02/03.png)
+
+## Лабораторная работа 3
+
+### Задание zadanie A.py
+```python
+import re
+from enum import unique
+
+
+def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
+    if casefold:
+        text = text.casefold()
+    if yo2e:
+        text = text.replace('ё', 'е')
+        text = text.replace('Ё', 'Е')
+        text = text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
+    while '   ' in text:
+        text = text.replace('   ', ' ')
+    return text.strip()
+
+
+def tokenize(text: str) -> list[str]:
+    text = text.replace('!', '')
+    text = re.split(r'[^\w-]+', text)
+    return text
+
+
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    dic = {}
+    unique = set(tokens)
+    for _ in unique:
+        dic[_] = tokens.count(_)
+    return dict(sorted(dic.items(), key=lambda x: (-x[1], x[0])))
+
+
+def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
+    return sorted(freq.items(), key=lambda x: x[1], reverse=True)[:n]
+
+
+print('----------normalize----------')
+print(normalize("ПрИвЕт\nМИр\t"))
+print(normalize("ёжик, Ёлка"))
+print(normalize("Hello\r\nWorld"))
+print(normalize("  двойные   пробелы  "))
+print('----------tokenize----------')
+print(tokenize("привет мир"))
+print(tokenize("hello,world!!!"))
+print(tokenize("по-настоящему круто"))
+print(tokenize("2025 год"))
+print(tokenize("emoji 😀 не слово"))
+print('----------count_freq + top_n----------')
+print(count_freq(["a","b","a","c","b","a"]))
+print(count_freq(["bb","aa","bb","aa","cc"]))
+print(top_n({"a":3,"b":2,"c":1}, n=2))
+print(top_n({"aa":2,"bb":2,"cc":1}, n=2))
+```
+![Картинка 1](images/lab03/01.png)
+
+### Задание text_stats.py
+```python
+import sys
+from src.lib import normalize, count_freq, top_n
+text = input()
+tokens = []
+def main():
+    if not text:
+        print("Ввод не предоставлен")
+        return
+    normalized_text = normalize(text)
+
+for word in normalize(text).split():
+    clean_word = word.strip('.,!!!!?;:"()[]{}')
+    if clean_word:
+        tokens.append(clean_word)
+
+total_words = len(tokens)
+freq_dict = count_freq(tokens)
+unique_words = len(freq_dict)
+top_words = top_n(freq_dict, 5)
+print(f"Всего слов: {total_words}")
+print(f"Уникальных слов: {unique_words}")
+print("Топ-5:")
+for word, count in top_words:
+        print(f"{word}:{count}")
+if __name__ == "__main__":
+    main()
+```
+![Картинка 2](./images/lab03/02.png)
