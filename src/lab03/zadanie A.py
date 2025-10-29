@@ -1,7 +1,4 @@
 import re
-from enum import unique
-
-
 def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     if casefold:
         text = text.casefold()
