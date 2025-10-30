@@ -29,13 +29,15 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     if yo2e:
         text = text.replace('ё', 'е')
         text = text.replace('Ё', 'Е')
+        text = text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
     while '   ' in text:
         text = text.replace('   ', ' ')
     return text.strip()
 
 
 def tokenize(text: str) -> list[str]:
-    text = re.split(r'\b[\w\'-]+\b', text)
+    text = text.replace('!', '')
+    text = re.split(r'[^\w-]+', text)
     return text
 
 
@@ -44,7 +46,7 @@ def count_freq(tokens: list[str]) -> dict[str, int]:
     unique = set(tokens)
     for _ in unique:
         dic[_] = tokens.count(_)
-    return dic
+    return dict(sorted(dic.items(), key=lambda x: (-x[1], x[0])))
 
 
 def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
