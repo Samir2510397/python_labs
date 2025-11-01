@@ -26,7 +26,7 @@ def count_freq(tokens: list[str]) -> dict[str, int]:
 
 
 def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
-    return sorted(freq.items(), key=lambda x: x[1], reverse=True)[:n]#сортируем пары из словаря по частоте в порядке убывания и берем первые n штук
+    return sorted(freq.items(), key=lambda x: -x[1])[:n]#сортируем пары из словаря по частоте в порядке убывания и берем первые n штук
 
 
 print('----------normalize----------')
