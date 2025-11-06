@@ -407,3 +407,107 @@ for i, (word, count) in enumerate(top_5, 1):
     print(f"  {i}. '{word}': {count}") if top_5 else print("  Нет слов")
 ```
 ![Картинка 2](./images/lab04/02.png)
+
+## Лабораторная работа 5
+
+### Задание A
+```python
+import json
+import csv
+from pathlib import Path
+
+
+def json_to_csv(json_path: str, csv_path: str) -> None:
+    try:
+        with open(json_path, 'r', encoding='utf-8') as json_file:# открываем JSON файл для чтения
+            data = json.load(json_file)# кидаем все в data и преобразуем в питоновские объекты
+
+        if not data or not isinstance(data, list):# проверяем на пустоту и список
+            raise ValueError
+
+        all_keys = set()#проходимся по всем элементас
+        for item in data:#собираем все ключи словарей
+            if not isinstance(item, dict):
+                raise ValueError
+            all_keys.update(item.keys())
+
+        with open(csv_path, 'w', newline='', encoding='utf-8') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=all_keys)# создаем writer понимающий структуру словарей
+            writer.writeheader()
+            for row in data:
+                complete_row = {key: row.get(key, "") for key in all_keys}# для каждой строки создаем полный словарь
+                writer.writerow(complete_row)
+
+    except FileNotFoundError:
+        raise FileNotFoundError
+
+
+def csv_to_json(csv_path: str, json_path: str) -> None:
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csv_file:# открываем CSV файл для чтения
+            reader = csv.DictReader(csv_file)# Читаем CSV как список словарей
+            data = list(reader)# переделываем в списк
+        if not data:
+            raise ValueError
+
+        with open(json_path, 'w', encoding='utf-8') as json_file:
+            json.dump(data, json_file, ensure_ascii=False, indent=2)#записываем данные в JSON файл в красивом форматировании
+
+    except FileNotFoundError:
+        raise FileNotFoundError
+```
+
+### Задание B
+```python
+import csv
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+
+
+def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
+    try:
+        wb = Workbook()# создаем новую Excel кнгу
+        ws = wb.active# получаем активный лист
+        ws.title = "Sheet1"# переименовываем лист
+
+        with open(csv_path, 'r', encoding='utf-8') as csv_file:
+            reader = csv.reader(csv_file)# создаем CSV reader
+            for row in reader:# читаем острочно
+                ws.append(row)# добавляем строку в Excel
+
+        for column_cells in ws.columns:# проходим по каждому столбцу
+            length = max(len(str(cell.value or "")) for cell in column_cells)#  находим макс длину текста в столбце
+            ws.column_dimensions[column_cells[0].column_letter].width = max(length + 2, 8)# устанавливаем ширину
+
+        wb.save(xlsx_path)# сохраняем Excel файл
+
+    except FileNotFoundError:
+        raise FileNotFoundError
+```
+
+### Задание test.py
+```python
+import sys
+import os
+from pathlib import Path
+
+current_dir = Path(__file__).parents# получаем директорую файла
+sys.path.insert(0, str(current_dir))# добавляем директорию в начало пути поиска
+
+from src.lib import json_to_csv, csv_to_json, csv_to_xlsx
+PROJECT_ROOT = Path(__file__).parent.parent.parent# поднимаемся на 3 уровня вверх от файла
+json_source = PROJECT_ROOT / "data" / "samples" / "ex1.json"# берем и создаем в папке data
+csv_source = PROJECT_ROOT / "data" / "samples" / "ex2.csv"
+output_csv = PROJECT_ROOT / "data" / "out" / "ex1.csv"
+output_json = PROJECT_ROOT / "data" / "out" / "ex2.json"
+output_xlsx = PROJECT_ROOT / "data" / "out" / "ex3.xlsx"
+try:
+    json_to_csv(str(json_source), str(output_csv))# преобразуем в нужные форматы
+    csv_to_json(str(csv_source), str(output_json))
+    csv_to_xlsx(str(csv_source), str(output_xlsx))
+except Exception as x:# сохраняем ошибку в переменную х и выводим
+    print(f"Ошибка: {x}")
+```
+![Картинка 1](./images/lab05/01.png)
+![Картинка 2](./images/lab05/02.png)
+![Картинка 3](./images/lab05/03.png)
