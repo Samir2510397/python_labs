@@ -269,7 +269,7 @@ def count_freq(tokens: list[str]) -> dict[str, int]:
 
 
 def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
-    return sorted(freq.items(), key=lambda x: x[1], reverse=True)[:n]
+    return sorted(freq.items(), key=lambda x: (-x[1], x[0]))[:n]
 
 
 print('----------normalize----------')
