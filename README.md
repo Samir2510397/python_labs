@@ -508,4 +508,6 @@ try:
 except Exception as x:# сохраняем ошибку в переменную х и выводим
     print(f"Ошибка: {x}")
 ```
-![Картинка 3](./images/lab02/03.png)
+![Картинка 1](./images/lab05/01.png)
+![Картинка 2](./images/lab05/02.png)
+![Картинка 3](./images/lab05/03.png)
