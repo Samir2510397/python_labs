@@ -11,8 +11,8 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
         if not data or not isinstance(data, list):# проверяем на пустоту и список
             raise ValueError
 
-        all_keys = set()#проходимся по всем элементас
-        for item in data:#собираем все ключи словарей
+        all_keys = set()#set для избежания дубликатов
+        for item in data:# проходим по всем элементам списка и собираем все ключи словарей
             if not isinstance(item, dict):
                 raise ValueError
             all_keys.update(item.keys())
@@ -37,7 +37,7 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
             raise ValueError
 
         with open(json_path, 'w', encoding='utf-8') as json_file:
-            json.dump(data, json_file, ensure_ascii=False, indent=2)#записываем данные в JSON файл в красивом форматировании
+            json.dump(data, json_file, ensure_ascii=False, indent=2)#записываем данные в JSON файл в красивом форматировании и кириллицей
 
     except FileNotFoundError:
         raise FileNotFoundError

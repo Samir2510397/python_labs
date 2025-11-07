@@ -16,7 +16,7 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
 
         for column_cells in ws.columns:# проходим по каждому столбцу
             length = max(len(str(cell.value or "")) for cell in column_cells)#  находим макс длину текста в столбце
-            ws.column_dimensions[column_cells[0].column_letter].width = max(length + 2, 8)# устанавливаем ширину
+            ws.column_dimensions[column_cells[0].column_letter].width = max(length + 2, 8)# устанавливаем ширину минимум в 8 символов
 
         wb.save(xlsx_path)# сохраняем Excel файл
 
