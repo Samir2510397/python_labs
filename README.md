@@ -552,8 +552,8 @@ if __name__ == "__main__":
     main()
 ```
 ![Картинка 1](images/lab06/01.png)
-![Картинка 2](images/lab06/01.png)
-![Картинка 3](images/lab06/01.png)
+![Картинка 2](images/lab06/02.png)
+![Картинка 3](images/lab06/03.png)
 
 ### Задание cli_text.py
 ```python
