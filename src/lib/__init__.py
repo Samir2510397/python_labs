@@ -37,7 +37,7 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
         text = text.replace('Ё', 'Е')
         text = text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
     while '   ' in text:
-        text = text.replace('   ', ' ')
+        text = text.replace('  ', '')
     return text.strip()
 
 
