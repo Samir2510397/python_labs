@@ -5,6 +5,8 @@ import csv
 from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
+from dataclasses import dataclass
+from datetime import datetime, date
 
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
     try:
@@ -181,3 +183,72 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
 
     except FileNotFoundError:
         raise FileNotFoundError
+
+@dataclass# Генрируем класс с аргументами
+class Student:
+    FullName: str
+    birthdate: str
+    group: str
+    gpa: float
+
+    def __post_init__(self):#Проверяем дату и балл на корректность
+        try:
+            datetime.strptime(self.birthdate, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError(f"Некорректный формат даты: {self.birthdate}, требуется: YYYY-MM-DD")
+
+        if not (0 <= self.gpa <= 5):
+            raise ValueError(f"Средний балл должен быть от 0 до 5. Вы ввели: {self.gpa}")
+
+    def age(self) -> int:#Вычисляем возраст
+        birth_date = datetime.strptime(self.birthdate, "%Y-%m-%d").date()
+        today = date.today()
+        age = today.year - birth_date.year
+
+        if (today.month, today.day) < (birth_date.month, birth_date.day):
+            age -= 1
+
+        return age
+
+    def to_dict(self) -> dict:#Сереализация
+        return {
+            "FullName": self.FullName,
+            "birthdate": self.birthdate,
+            "group": self.group,
+            "gpa": self.gpa
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict):#Десереализация
+        return cls(
+            FullName=data["FullName"],
+            birthdate=data["birthdate"],
+            group=data["group"],
+            gpa=float(data["gpa"])
+        )
+
+    def __str__(self) -> str:#Переделываем все в строки
+        return (
+            f"{self.FullName}\n"
+            f"Дата рождения: {self.birthdate}\n"
+            f"Группа: {self.group}\n"
+            f"Средний балл: {self.gpa}"
+        )
+
+def students_to_json(students: list[Student], path: str) -> None:#Преобразуем все в словарь и записываем в json файл
+    students_data = [student.to_dict() for student in students]
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(students_data, f, ensure_ascii=False, indent=2)
+
+
+def students_from_json(path: str) -> list[Student]:#Читаем файл и создаем объекты для каждого словаря, а также обрабатываем ошибки
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            students_data = json.load(f)
+
+        students = [Student.from_dict(data) for data in students_data]
+        return students
+    except FileNotFoundError:
+        print(f"Файл {path} не найден")
+        return []
+

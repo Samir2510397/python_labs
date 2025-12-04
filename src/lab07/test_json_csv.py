@@ -52,10 +52,10 @@ def test_csv_to_json(tmp_path: Path):
 Alice,22
 Bob,25"""
 
-    src.write_text(csv_data, encoding="utf-8")
+    src.write_text(csv_data, encoding = "utf-8")
     csv_to_json(str(src), str(dst))
 
-    with dst.open(encoding="utf-8") as f:
+    with dst.open(encoding = "utf-8") as f:
         result_data = json.load(f)
 
     assert isinstance(result_data, list) and len(result_data) == 2 #Результат - список, 2 элемента в списке
