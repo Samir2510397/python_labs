@@ -965,5 +965,285 @@ l.update("Абдуллин Самир Ниязович",birthdate = '2002-03-25'
 ![Картинка 2](images/lab09/02.png)
 
 
+## Лаболаторная работа 10
+# Теория
+# Стек (англ. stack - «стопка») - абстрактный тип данных, упорядоченный набор элементов. Добавление новых элементов и удаление существующих происходит с одного конца, называемого вершиной стека.
+#
+# Операции:
+#
+# push(x) — положить элемент сверху;
+# pop() — снять верхний элемент;
+# peek() — посмотреть верхний, не снимая.
+# Типичные применения:
+#
+# история действий (undo/redo);
+# обход графа/дерева в глубину (DFS);
+# парсинг выражений, проверка скобок.
+# Очередь (Queue) — это структура данных, которая работает по принципу FIFO (First In, First Out): «первый пришёл — первый вышел». Элементы добавляются в конец очереди и извлекаются из начала.
+#
+# Операции:
+#
+# enqueue(x) — добавить в конец;
+# dequeue() — взять элемент из начала;
+# peek() — посмотреть первый элемент, не удаляя.
+# Типичные применения:
+#
+# обработка задач по очереди (job queue);
+# обход графа/дерева в ширину (BFS);
+# буферы (сетевые, файловые, очереди сообщений).
+# В Python:
+#
+# обычный list плохо подходит для реализации очереди:
+# удаление с начала pop(0) — это O(n) (все элементы сдвигаются);
+# collections.deque даёт O(1) операции по краям:
+# append / appendleft — O(1);
+# pop / popleft — O(1).
+# Односвязный список (Singly Linked List) — это линейная и однонаправленная структура данных, в которой данные сохраняются на узлах, и каждый узел связан ссылкой со своим следующим узлом.
+#
+# Структура:
+#
+# состоит из узлов Node;
+# каждый узел хранит:
+# value — значение элемента;
+# next — ссылку на следующий узел или None (если это последний).
+# Основные идеи:
+#
+# элементы не хранятся подряд в памяти, как в массиве;
+# каждый элемент знает только «следующего соседа».
+# Плюсы:
+#
+# вставка/удаление в начало списка за O(1):
+# если есть ссылка на голову (head), достаточно перенаправить одну ссылку;
+# при удалении из середины не нужно сдвигать остальные элементы:
+# достаточно обновить ссылки узлов;
+# удобно использовать как базовый строительный блок для других структур (например, для очередей, стеков, хеш-таблиц с цепочками).
+# Минусы:
+#
+# доступ по индексу i — O(n):
+# чтобы добраться до позиции i, нужно пройти i шагов от головы;
+# нет быстрого доступа к предыдущему элементу:
+# чтобы удалить узел, нужно знать его предыдущий узел → часто нужен дополнительный проход.
+# Двусвязный список (Doubly Linked List) — это структура данных, в которой каждый элемент (узел) содержит указатели на предыдущий и следующий элементы списка.
+#
+# Основные идеи:
+#
+# можно двигаться как вперёд, так и назад по цепочке узлов;
+# удобно хранить ссылки на оба конца: head и tail.
+# Плюсы по сравнению с односвязным:
+#
+# удаление узла по ссылке на него — O(1):
+# достаточно «вытащить» его, перенастроив prev.next и next.prev;
+# не нужно искать предыдущий узел линейным проходом;
+# эффективен для структур, где часто нужно удалять/добавлять элементы в середине, имея на них прямые ссылки (например, реализация LRU-кэша);
+# можно легко идти в обе стороны:
+# прямой и обратный обход списка.
+# Минусы:
+#
+# узел занимает больше памяти:
+# нужно хранить две ссылки (prev, next);
+# код более сложный:
+# легко забыть обновить одну из ссылок и «сломать» структуру;
+# сложнее отлаживать.
+
+### Задание structures.py
+```python
+from collections import deque
+
+
+class Stack:#Создаем пустой стек
+    def __init__(self):
+        self._data = []#пустой список для хранения
+
+    def push(self, item):#добавляем элемент на вершину
+        self._data.append(item)
+
+    def pop(self):#удаляем элементы с вершины(без элементов удаляет последний)
+        if self.is_empty():
+            raise IndexError("Стек пуст, удалять нечего")
+        return self._data.pop()
+
+    def peek(self):#показывает эелент вершины без удаления
+        if self.is_empty():
+            return None
+        return self._data[-1]
+
+    def is_empty(self):#проверяем пустоту стека
+        return len(self._data) == 0
+
+    def __len__(self):#кол-во элементов в стеке
+        return len(self._data)
+
+
+class Queue:#создаем пустую куешку
+    def __init__(self):
+        self._data = deque()
+
+    def enqueue(self, item):#добавляем элемент в конец куешки
+        self._data.append(item)
+
+    def dequeue(self):#удаляем и выводим элемент из начала куешки
+        if self.is_empty():
+            return IndexError
+        return self._data.popleft()
+
+    def peek(self):#смотрим первый элемент куешки
+        if not self._data:
+            return None
+        return self._data[0]
+
+    def is_empty(self) -> bool:#проверка на пустоту
+        return not self._data
+
+    def __len__(self):#кол-во элементов в куешке
+        return len(self._data)
+
+
+if __name__ == '__main__':#проверка
+    s = Stack()
+    s.push(6)
+    s.push(3)
+    print(s.pop())
+    print(s.peek())
+    print(s.__len__())
+    print(s.is_empty())
+    s.pop()
+    print(s.is_empty())
+
+    q = Queue()
+    q.enqueue(6)
+    q.enqueue(4)
+    print(q.dequeue())
+    print(q.peek())
+    print(q.__len__())
+    print(q.is_empty())
+    q.dequeue()
+    print(q.is_empty())
+```
+![Картинка 1](images/lab10/01.png)
+
+### Задание Linked_list.py
+```python
+class Node:#узел
+    def __init__(self, value, next=None):
+        self.value = value #данные узла
+        self.next = next #ссылка на след. узел
+
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None #указатель первого узла
+        self.tail = None #указатель последнего узла
+        self._size = 0 # кол-во элементов
+
+    def append(self, value):#добавляем элемент в конец
+        new_n = Node(value)# создаем новый узел
+        if self.head == None:#если список пуст, новый узел становится и головой и хвостом
+            self.head = new_n
+            self.tail = new_n
+        else:#если не пуст
+            self.tail.next = new_n #старых хвост теперь не хвост
+            self.tail = new_n # новый узел теперь хвост
+        self._size += 1 # увеличиваем размер
+
+    def prepend(self, value):#добавление элемента в начало
+        new_n = Node(value)#создаем новый узел
+        if self.head == None:
+            self.head = new_n
+            self.tail = new_n
+        new_n.next = self.head#новый узел ссылается на старую голову
+        self.head = new_n#новый узел становится головой
+        self._size += 1 # увеличиваем размер
+
+    def insert(self, idx: int, value):#вставка по индексу
+        if idx < 0 or idx > self._size:# проверка индекса
+            raise IndexError
+        new_n = Node(value)
+        if idx == 0:#вставка в начало
+            new_n.next = self.head
+            self.head = new_n
+            self._size += 1
+            return
+        if idx == self._size:#вставка в конец
+            self.tail.next = new_n
+            self.tail = new_n
+            self._size += 1
+            return
+        c = 0 #вставка в середину
+        prev = None
+        curr = self.head
+        while curr != None:
+            if c == idx:
+                prev.next = new_n
+                new_n.next = curr
+
+                break
+            prev = curr
+            curr = curr.next
+            c += 1
+
+        self._size += 1 #увеличиваем размер
+
+    def remove_at(self, idx: int):#удаление по индексу
+        if idx < 0 or idx >= self._size:#проверка индекса
+            raise IndexError
+        if idx == 0:#удаление головы
+            self.head = self.head.next
+            self._size -= 1
+            return
+
+        curr = self.head#удаление середины и конца
+        for i in range(idx-1):
+            curr = curr.next
+
+        value = self.head.value
+
+        if curr.next == self.tail:#удаление конца
+            self.tail = curr
+
+        curr.next = curr.next.next
+        self._size -= 1
+        return
+
+
+    def __iter__(self):#итератор
+        curr = self.head
+        while curr != None:
+            yield curr.value
+            curr = curr.next
+
+    def __len__(self):
+        return self._size
+
+    def __repr__(self):#строковое представление для вывода
+        return f"SinglyLinkedList({list(self)})"
+
+
+# test SinglyLinkedList
+sll = SinglyLinkedList()
+print(f"1. Пустой список: {sll}")
+sll.append(7)
+sll.append(8)
+sll.append(10)
+sll.append(20)
+sll.append(30)
+print(f"2. Добавление в конец (10, 20, 30): {sll}")
+sll.prepend(5)
+print(f"3. Добавление в начало (5): {sll}")
+sll.insert(2, 15)
+print(f"4. Вставка 15 по индексу 2: {sll}")
+sll.insert(0, 1)
+print(f"5. Вставка 1 по индексу 0: {sll}")
+sll.insert(8, 100)
+print(f"6. Вставка 100 в конец: {sll}")
+sll.remove_at(4)
+print(f"7. Удаление 8 (середина): {sll}")
+sll.remove_at(0)
+print(f"8. Удаление 1 (голова): {sll}")
+sll.remove_at(6)
+print(f"9. Удаление 100 (хвост): {sll}")
+print(f"10. Размер: {len(sll)}")
+print(f"11. Пуст ли список? {len(sll) == 0}")
+```
+![Картинка 1](images/lab10/02.png)
 
 
