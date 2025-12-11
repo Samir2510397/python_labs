@@ -750,6 +750,220 @@ def test_file_error(tmp_path: Path):
 ![Картинка 2](./images/lab07/02.png)
 
 
+## Лабораторная работа 8
+
+### Задание models.py
+```python
+from dataclasses import dataclass
+from datetime import datetime, date
+
+
+@dataclass# Генрируем класс с аргументами
+class Student:
+    FullName: str
+    birthdate: str
+    group: str
+    gpa: float
+
+    def __post_init__(self):#Проверяем дату и балл на корректность
+        try:
+            datetime.strptime(self.birthdate, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError(f"Некорректный формат даты: {self.birthdate}, требуется: YYYY-MM-DD")
+
+        if not (0 <= self.gpa <= 5):
+            raise ValueError(f"Средний балл должен быть от 0 до 5. Вы ввели: {self.gpa}")
+
+    def age(self) -> int:#Вычисляем возраст
+        birth_date = datetime.strptime(self.birthdate, "%Y-%m-%d").date()
+        today = date.today()
+        age = today.year - birth_date.year
+
+        if (today.month, today.day) < (birth_date.month, birth_date.day):
+            age -= 1
+
+        return age
+
+    def to_dict(self) -> dict:#Сереализация
+        return {
+            "FullName": self.FullName,
+            "birthdate": self.birthdate,
+            "group": self.group,
+            "gpa": self.gpa
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict):#Десереализация
+        return cls(
+            FullName=data["FullName"],
+            birthdate=data["birthdate"],
+            group=data["group"],
+            gpa=float(data["gpa"])
+        )
+
+    def __str__(self) -> str:#Переделываем все в строки
+        return (
+            f"{self.FullName}\n"
+            f"Дата рождения: {self.birthdate}\n"
+            f"Группа: {self.group}\n"
+            f"Средний балл: {self.gpa}"
+        )
+
+
+if __name__ == "__main__":
+    student = Student("Абдуллин Самир Ниязович", "2007-06-07", "БИВТ-25-3", 5.0)#Создаем с валидацией
+    print(student)#Выводим черес строки
+    print("=" * 140)#Разделяем
+
+    print(f"Возраст: {student.age()}")
+
+    student_dict = student.to_dict()#Сереализируем в словарь
+    print(f"Сериализованный: {student_dict}")
+
+    restored_student = Student.from_dict(student_dict)#Десереализируем в словарь с валидацией
+    print(f"Десериализованный: {restored_student}")
+```
+![Картинка 1](images/lab08/01.png)
+
+### Задание serialize.py
+```python
+import json
+from src.lib import Student
+
+
+def students_to_json(students: list[Student], path: str) -> None:#Преобразуем все в словарь и записываем в json файл
+    students_data = [student.to_dict() for student in students]
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(students_data, f, ensure_ascii=False, indent=2)
+
+
+def students_from_json(path: str) -> list[Student]:#Читаем файл и создаем объекты для каждого словаря, а также обрабатываем ошибки
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            students_data = json.load(f)
+
+        students = [Student.from_dict(data) for data in students_data]
+        return students
+    except FileNotFoundError:
+        print(f"Файл {path} не найден")
+        return []
+
+
+def test_serialization():#Тестируем и сохраняем в json файле
+    students = students_from_json('data/lab08/lab08_input.json')
+    print("\n Загруженные студенты:")
+    for student in students:
+        print(f"FullName: {student.FullName}, birthdate: {student.birthdate}, group: {student.group}, GPA: {student.gpa}")
+    print("\n Сохранение в выходной файл")
+    students_to_json(students, 'data/lab08/lab08_output.json')
+    print("Файл сохранен: data/lab08/lab08_output.json")
+
+
+if __name__ == "__main__":
+    test_serialization()
+```
+![Картинка 2](./images/lab08/02.png)
+
+
+## Лабораторная работа 9
+
+### Задание group.py
+```python
+import csv
+from pathlib import Path
+from src.lib import Student, students_from_json
+from typing import List
+
+class Group:
+    def __init__(self, storage_path: str):
+        self.path = Path(storage_path)#преобразуем строку в path
+        self.fieldnames = ['FullName', 'birthdate', 'group', 'gpa']# Наши заголовки
+        self._ensure_file_exists()#Создаем файл с заголовком
+
+    def _ensure_file_exists(self):
+        if not self.path.exists():#Если нет файла
+            self.path.parent.mkdir(parents=True, exist_ok=True)#Создаем папки
+            with open(self.path, 'w', encoding='utf-8', newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=self.fieldnames)
+                writer.writeheader()#записываем заголовок
+
+    def read_all(self) -> List[Student]:
+        self._ensure_file_exists()
+        students = []
+        with open(self.path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)#Читаем как словарь
+            for row in reader:#Для каждой строки
+                students.append(Student.from_dict(row))#Создаем студента
+        return students
+
+    def list(self)->list[Student]:#Возвращаем всех студентов
+        return self.read_all()
+
+    def add(self, student: Student):#Добавляем нового студента
+        self._ensure_file_exists()
+        with open(self.path, "a", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=self.fieldnames)
+            writer.writerow(student.to_dict())#Добавляем в конец файла
+
+    def find(self, substr:str) -> List[Student]:
+        students = self.read_all()#Читаем всех студентов
+        l = []#Для результатов
+        for st in students:
+            if substr.lower() in st.FullName.lower():#проверяем есть ли подстрока в фио
+                l.append(st)#Добавляем результаты
+        return l
+
+    def remove(self, FullName: str):#Читаем всех
+        students = self.read_all()
+        new_students = [st for st in students if st.FullName != FullName]#Список без удаляемого студента
+        if len(students) != len(new_students):
+            with open(self.path, "w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=self.fieldnames)
+                writer.writeheader()#Перезапись заголовка
+                for st in new_students:#Записываем всех кроме удаленного
+                    writer.writerow(st.to_dict())
+
+    def remove_all(self):
+        with open(self.path, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=self.fieldnames)
+            writer.writeheader()
+
+    def update(self, FullName: str, **ost):
+        students = self.read_all()#читаем все
+        flag = False#флаг нахождения студента
+        for st in students:
+            if st.FullName == FullName:#Если нашли то обновляем
+                for key, value in ost.items():
+                    if hasattr(st, key):#проверяем есть ли у студента поле
+                        setattr(st, key, value)#устанавливаем новое значение
+                flag = True
+                break
+        if flag:#если нашли и обновили
+            with open(self.path, "w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=self.fieldnames)
+                writer.writeheader()
+                for st in students:#перезаписываем всех студентов
+                    writer.writerow(st.to_dict())
+
+
+
+students = students_from_json('C:/Users/Samir/OneDrive/Документы/GitHub/python_labs/data/lab08/lab08_input.json')#Читаем файл и создаем объект студент и превращаем его в список
+l = Group("test.csv")#создаем файл
+l.remove_all()#чистим его
+for i in students:#каждого студента добавляем в csv
+    l.add(i)
+print(*l.list(),sep='\n')#читаем и распаковываем всех
+print('='*140)
+print(*l.find("ин"),sep='\n')#ищем меня
+print('='*140)
+l.remove("Киселев Александр Игоревич")#кикаем саню
+l.update("Абдуллин Самир Ниязович",birthdate = '2002-03-25',group='tsp-21-1',gpa=3.0)#превращаем меняя в старшекурсника-раздолбая
+
+
+```
+![Картинка 1](images/lab09/01.png)
+![Картинка 2](images/lab09/02.png)
+
 
 
 
