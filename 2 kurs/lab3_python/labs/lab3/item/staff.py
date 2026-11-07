@@ -1,0 +1,25 @@
+from ..combat.hit import Hit
+from ..core.dice import Dice
+from .weapon import Weapon
+
+# урон посоха непредсказуем: он может быть как больше, так и меньше базового
+class Staff(Weapon):
+
+    def __init__(self, code: str, name: str, base_price: int, damage: int, scatter: float) -> None:
+        super().__init__(code, name, base_price, damage)
+        self._scatter = scatter
+
+    def roll_damage(self) -> Hit:
+        return Hit(Dice().roll(self._min_damage, self._max_damage), False)
+
+    @property
+    def description(self) -> str:
+        return f"урон {self._min_damage}-{self._max_damage}"
+
+    @property
+    def _min_damage(self) -> int:
+        return round(self.damage * (1 - self._scatter))
+
+    @property
+    def _max_damage(self) -> int:
+        return round(self.damage * (1 + self._scatter))

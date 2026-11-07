@@ -1,0 +1,25 @@
+test_abstract_factory_families (test_lab3.Lab3Tests.test_abstract_factory_families) ... ok
+test_builder_defaults_and_formulas (test_lab3.Lab3Tests.test_builder_defaults_and_formulas) ... ok
+test_builder_rejects_invalid_fields (test_lab3.Lab3Tests.test_builder_rejects_invalid_fields) ... ok
+test_console_creation_expedition_and_exit (test_lab3.Lab3Tests.test_console_creation_expedition_and_exit) ... ok
+test_defeat_loses_half_gold (test_lab3.Lab3Tests.test_defeat_loses_half_gold) ... ok
+test_defense_cap_and_minimum_damage (test_lab3.Lab3Tests.test_defense_cap_and_minimum_damage) ... ok
+test_dice_reseed_repeats_sequence (test_lab3.Lab3Tests.test_dice_reseed_repeats_sequence) ... ok
+test_enchantment_is_frozen (test_lab3.Lab3Tests.test_enchantment_is_frozen) ... ok
+test_equipment_returns_old_item_to_inventory (test_lab3.Lab3Tests.test_equipment_returns_old_item_to_inventory) ... ok
+test_expedition_is_reproducible_for_same_initial_state (test_lab3.Lab3Tests.test_expedition_is_reproducible_for_same_initial_state) ... ok
+test_experience_can_raise_multiple_levels (test_lab3.Lab3Tests.test_experience_can_raise_multiple_levels) ... ok
+test_factory_method_creates_different_enemies (test_lab3.Lab3Tests.test_factory_method_creates_different_enemies) ... ok
+test_insufficient_funds_leave_state_unchanged (test_lab3.Lab3Tests.test_insufficient_funds_leave_state_unchanged) ... ok
+test_merchant_buy_sell_and_equipped_rejection (test_lab3.Lab3Tests.test_merchant_buy_sell_and_equipped_rejection) ... ok
+test_progression_from_start_to_dragon_victory (test_lab3.Lab3Tests.test_progression_from_start_to_dragon_victory) ... ok
+test_prototype_isolates_enchantments (test_lab3.Lab3Tests.test_prototype_isolates_enchantments) ... ok
+test_singleton_identity (test_lab3.Lab3Tests.test_singleton_identity) ... ok
+test_unknown_codes_raise (test_lab3.Lab3Tests.test_unknown_codes_raise) ... ok
+test_victory_rewards_and_death_events (test_lab3.Lab3Tests.test_victory_rewards_and_death_events) ... ok
+test_wrong_enchantment_rejected (test_lab3.Lab3Tests.test_wrong_enchantment_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.201s
+
+OK
